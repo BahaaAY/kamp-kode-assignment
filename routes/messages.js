@@ -3,12 +3,12 @@ const router = express.Router();
 const { body } = require("express-validator");
 const { addMessage } = require("../controllers/messages");
 
-router.get("/message", (req, res) => {
+router.get("/", (req, res) => {
   res.render("index", { messageSent: false, errors: null });
 });
 
 router.post(
-  "/message",
+  "/",
   [
     body("name").trim().notEmpty().withMessage("Name cannot be empty!"),
     body("email")
