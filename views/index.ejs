@@ -18,7 +18,34 @@
     <title>Welcome</title>
   </head>
   <body class="px-3">
-    <form class="col-lg-6 col-md-8 col-12">
+    <% if (messageSent) { %>
+    <div
+      class="alert alert-success alert-dismissible fade show w-50 mx-auto"
+      role="alert"
+    >
+      Message sent successfully!
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    <% } %> <% if (errors) { %> <% for (var i = 0; i < errors.length; i++) { %>
+    <div
+      class="alert alert-danger alert-dismissible fade show w-50 mx-auto"
+      role="alert"
+    >
+      <%= errors[i].msg || 'Something went wrong' %>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    <% } %> <% } %>
+    <form class="col-lg-6 col-md-8 col-12" method="post" action="/message">
       <div class="form-floating mb-3">
         <input
           type="text"
@@ -54,52 +81,47 @@
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
     <script type="text/javascript">
-      //validate user input
+      // Validate user input
       let nameField = document.getElementById("name");
       let emailField = document.getElementById("email");
       let messageField = document.getElementById("message");
-      let submitBtn = document.querySelector("button[type='submit']");
+      let form = document.querySelector("form");
 
-      function validateForm(event) {
-        //reset validation
+      function validateForm() {
+        // Reset validation
         nameField.classList.remove("is-invalid");
         emailField.classList.remove("is-invalid");
         messageField.classList.remove("is-invalid");
-        if (nameField.value == "") {
+        let isValid = true;
+
+        if (nameField.value.trim() === "") {
           nameField.classList.add("is-invalid");
-          return false;
+          isValid = false;
         }
-        if (emailField.value == "" || !emailField.value.includes("@")) {
+        if (emailField.value.trim() === "" || !emailField.value.includes("@")) {
           emailField.classList.add("is-invalid");
-          return false;
+          isValid = false;
         }
-        if (messageField.value == "") {
+        if (messageField.value.trim() === "") {
           messageField.classList.add("is-invalid");
-          return false;
+          isValid = false;
         }
-        return true;
+        return isValid;
       }
 
       function handleSubmit(event) {
-        //prevent form submission
+        // Prevent form submission
         event.preventDefault();
 
-        //validate user input
-        const validationResult = validateForm(event);
+        // Validate user input
+        const validationResult = validateForm();
 
         if (validationResult) {
-          alert("form submitted");
+          form.submit(); // Submit the form
         }
       }
 
-      submitBtn.addEventListener("click", handleSubmit);
-
-      //submit form
+      form.addEventListener("submit", handleSubmit);
     </script>
-    <div class="d-block d-sm-none">xs</div>
-    <div class="d-none d-sm-block d-md-none">sm</div>
-    <div class="d-none d-md-block d-lg-none">md</div>
-    <div class="d-none d-lg-block d-xl-none">lg</div>
-    <div class="d-none d-xl-block">xl</div>
   </body>
 </html>
